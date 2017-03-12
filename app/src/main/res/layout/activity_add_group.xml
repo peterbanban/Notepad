@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/activity_add_group"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#f0f0f0"
+    android:orientation="vertical"
+    tools:context="com.example.administrator.notepad.activity.AddGroupActivity"
+    >
+
+   <include layout="@layout/layout_appbar"/>
+
+   <EditText
+       android:hint="分组名称"
+       android:textColor="@color/colorDeepGray"
+       android:layout_width="match_parent"
+       android:layout_height="48dp"
+       android:background="@color/colorWhite_1"
+       android:layout_marginTop="16dp"
+       android:id="@+id/editText"
+       android:paddingLeft="16dp"/>
+
+   <RelativeLayout
+       android:id="@+id/rl_icon_choose"
+       android:background="@color/colorWhite_1"
+       android:layout_width="match_parent"
+       android:layout_height="48dp"
+       android:clickable="true"
+       android:foreground="?attr/selectableItemBackground"
+       android:layout_marginTop="16dp"
+       android:paddingLeft="16dp"
+       android:paddingRight="16dp"
+       >
+      <TextView
+          android:layout_centerVertical="true"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="icon"
+          android:textSize="20dp"
+          android:textColor="@color/colorPrimaryDark"
+          />
+      <ImageView
+          style="@style/Icon"
+          android:id="@+id/iv_go"
+          android:layout_centerVertical="true"
+          android:layout_alignParentRight="true"
+          android:src="@drawable/ico_3"/>
+      <ImageView
+          style="@style/Icon"
+          android:id="@+id/iv_choose_icon"
+          android:layout_centerVertical="true"
+          android:layout_toLeftOf="@id/iv_go"
+          android:layout_marginRight="@dimen/activity_horizontal_margin"/>
+   </RelativeLayout>
+</LinearLayout>
