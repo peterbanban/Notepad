@@ -32,6 +32,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import static com.example.administrator.notepad.R.id.activity_main;
 import static com.example.administrator.notepad.R.id.list_item;
 import static com.example.administrator.notepad.R.id.toolbar;
 
@@ -56,6 +57,7 @@ public class MainActivity extends AppCompatActivity {
                 String groupName=groups.get(position).getKey();
                 Intent intent=new Intent(MainActivity.this, ToDoListActivity.class);
                 intent.putExtra("groupName",groupName);
+                intent.putExtra("flagData0",groups.size()*1000+"");
                 startActivity(intent);
             }
         });
@@ -113,11 +115,14 @@ public class MainActivity extends AppCompatActivity {
     @Override
 
     public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
+       /* MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_main, menu);
-        return super.onCreateOptionsMenu(menu);
+        return super.onCreateOptionsMenu(menu);*/
+        getMenuInflater().inflate(R.menu.menu_main,menu);
+        // TODO: 2017/04/14
+        return true;
     }
-
+     
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int itemId = item.getItemId();
@@ -126,8 +131,9 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent = new Intent(MainActivity.this, AddGroupActivity.class);
                 startActivity(intent);
                 break;
+
         }
-            return super.onOptionsItemSelected(item);
+            return super.onOptionsItemSelected(item);//return true;
 
     }
 

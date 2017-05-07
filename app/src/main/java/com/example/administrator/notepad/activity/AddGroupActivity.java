@@ -75,7 +75,7 @@ public class AddGroupActivity extends AppCompatActivity {
                     return  true;
                 }
                 SharedPreferencesTool.SaveData(AddGroupActivity.this,groupName,chosenIconId);
-                finish();
+                finish();//当按下back按钮后不能再进入使用finish()的activity，只能通过intent进入，如果不使用则能back到此页面
                 break;
         }
         return super.onOptionsItemSelected(item);

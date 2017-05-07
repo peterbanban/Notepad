@@ -1,9 +1,9 @@
 package com.example.administrator.notepad.activity;
 
-import android.app.DatePickerDialog;
-import android.app.TimePickerDialog;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Intent;
 import android.content.SharedPreferences;
-import android.icu.util.Calendar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -11,14 +11,18 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.CheckBox;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.example.administrator.notepad.R;
+import com.example.administrator.notepad.utils.AlarmReceiver;
+import com.example.administrator.notepad.utils.MyApplication;
 import com.example.administrator.notepad.wigets.DateAndTimePickerDialog;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class AddToDoActivity extends AppCompatActivity {
     TextView tvPickTime;
@@ -26,14 +30,13 @@ public class AddToDoActivity extends AppCompatActivity {
     CheckBox cbNeedNotify;
     String pickedTime;
     String groupName;
-
+    int flagData;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_to_do);
-
         groupName = getIntent().getStringExtra("groupName");
-
+        flagData=Integer.parseInt(getIntent().getStringExtra("flagData"));
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle("添加任务");
         setSupportActionBar(toolbar);
@@ -79,6 +82,34 @@ public class AddToDoActivity extends AppCompatActivity {
                 }
                 break;
         }
+       if (cbNeedNotify.isChecked()) {
+           clockRemind();
+       }
         return super.onOptionsItemSelected(item);
     }
+    public void clockRemind() {
+        Intent intent =new Intent(MyApplication.getContext(), AlarmReceiver.class);
+        intent.setAction("short");
+        PendingIntent pendingIntent=PendingIntent.getBroadcast(MyApplication.getContext(),flagData,intent,
+                PendingIntent.FLAG_CANCEL_CURRENT);
+
+        Intent intent1=new Intent(MyApplication.getContext(),DialogActivity.class);
+        PendingIntent pendingIntent1=PendingIntent.getActivity(MyApplication.getContext(),flagData,intent1,
+                PendingIntent.FLAG_CANCEL_CURRENT);
+        String strTime=pickedTime+":00";
+        SimpleDateFormat format=new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+        Date date= null;
+        try {
+            date = format.parse(strTime);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        MyApplication.setContext(AddToDoActivity.this);
+        AlarmManager alarmManager1 = (AlarmManager) getSystemService(ALARM_SERVICE);
+        alarmManager1.set(AlarmManager.RTC_WAKEUP,date.getTime(),pendingIntent1);
+        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+        alarmManager.set(AlarmManager.RTC_WAKEUP,date.getTime(),pendingIntent);
+    }
+
 }
+

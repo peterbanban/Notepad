@@ -40,10 +40,8 @@ public class GroupAdapter extends MyBaseAdapter{
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder viewHolder;
         if(convertView==null){
-            viewHolder=new ViewHolder();
-            LayoutInflater inflater=LayoutInflater.from(context);    //填充页面
-            convertView = inflater.inflate(R.layout.item_icon_choose,parent,false);
-
+            viewHolder=new ViewHolder();    //填充页面
+            convertView=LayoutInflater.from(context).inflate(R.layout.item_icon_choose,parent,false);
             viewHolder.ivIcon= (ImageView)convertView.findViewById(R.id.iv_icon);  //解析控件
             viewHolder.tvName=(TextView)convertView.findViewById(R.id.tv_name);
             convertView.setTag(viewHolder);

@@ -1,30 +1,34 @@
+//import android.util.Log
+
 apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 24
-    buildToolsVersion "24.0.3"
+    buildToolsVersion '25.0.0'
     defaultConfig {
         applicationId "com.example.administrator.notepad"
-        minSdkVersion 15
-        targetSdkVersion 24
+        minSdkVersion 15    //最低兼容的android版本 即安卓4
+        targetSdkVersion 24  //运行在的版本
         versionCode 1
-        versionName "1.0"
+        versionName "1.0"   //对外的APP版本号
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled false   //用于对java字节码文件进行混淆   下面一行为混淆规则
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
 }
 
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
+    compile fileTree(include: ['*.jar'], dir: 'libs') //本地库依耐声明
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
+    //添加远程模板库依耐 格式为域名:库:组:版本号
     compile 'com.android.support:appcompat-v7:24.2.1'
-    testCompile 'junit:junit:4.12'
     compile 'com.android.support:design:24.2.1'
+    compile 'com.android.support.constraint:constraint-layout:1.0.2'
+    testCompile 'junit:junit:4.12'
 }
