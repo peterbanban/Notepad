@@ -76,7 +76,7 @@ public class AddToDoActivity extends AppCompatActivity {
                     boolean needNotify = cbNeedNotify.isChecked();
                     SharedPreferences sharedPreferences = getSharedPreferences(groupName, MODE_PRIVATE);
                     SharedPreferences.Editor editor = sharedPreferences.edit();
-                    editor.putString(toDoName, needNotify + "&" + pickedTime+"&"+System.currentTimeMillis());
+                    editor.putString(toDoName+"       "+pickedTime, needNotify + "&" + pickedTime+"&"+System.currentTimeMillis());
                     editor.commit();
                     finish();
                 }
