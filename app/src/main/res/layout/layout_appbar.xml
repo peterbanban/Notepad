@@ -10,7 +10,7 @@
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/colorWhite"
+            android:background="@color/colorPurple"
             android:id="@+id/toolbar"
            >
         </android.support.v7.widget.Toolbar>
