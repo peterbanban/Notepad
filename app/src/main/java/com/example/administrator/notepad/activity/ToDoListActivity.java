@@ -23,6 +23,7 @@ import com.example.administrator.notepad.utils.AlarmReceiver;
 import com.example.administrator.notepad.utils.DataService;
 import com.example.administrator.notepad.utils.MyApplication;
 
+import java.io.File;
 import java.util.List;
 import java.util.Map;
 
@@ -31,7 +32,8 @@ public class ToDoListActivity extends AppCompatActivity {
     ListView lvToDos;
     List<Map.Entry<String, String>> toDos2;
     SharedPreferences shared;
-    int  flagData0;
+    int flagData0;
+    String content;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,12 +41,29 @@ public class ToDoListActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         groupName = intent.getStringExtra("groupName");
-        flagData0= Integer.parseInt(intent.getStringExtra("flagData0"));
+        flagData0 = Integer.parseInt(intent.getStringExtra("flagData0"));
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle(groupName);
         setSupportActionBar(toolbar);
         lvToDos = (ListView) findViewById(R.id.lv_toDos);
         lvToDos.setLongClickable(true);
+
+        lvToDos.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                String timeValue= toDos2.get(position).getValue();
+                content=toDos2.get(position).getKey();
+                String [] iFields=timeValue.split("&");//按%切割字符串
+                String iTimeString=iFields[1];
+                Intent intent1 = new Intent(ToDoListActivity.this, ContentActivity.class);
+                intent1.putExtra("content",content);
+                intent1.putExtra("iTime",iTimeString);
+                startActivity(intent1);
+            }
+        });
+
+
+        //设置长按删除事项
         lvToDos.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
@@ -64,23 +83,30 @@ public class ToDoListActivity extends AppCompatActivity {
                         lvToDos.setAdapter(new ToDoAdapter(ToDoListActivity.this, toDos2));     //为listview设置适配器
                         new ToDoAdapter(ToDoListActivity.this, toDos2).notifyDataSetChanged();  //更新适配器内容
 
-                 //删除闹钟和广播提醒
-                        Intent intent=new Intent(ToDoListActivity.this, AlarmReceiver.class);
-                        PendingIntent pi= PendingIntent.getBroadcast(ToDoListActivity.this,position+flagData0,intent,PendingIntent.FLAG_CANCEL_CURRENT);
-                        AlarmManager am= (AlarmManager) getSystemService(Activity.ALARM_SERVICE);
+                        //删除闹钟和广播提醒
+                        Intent intent = new Intent(ToDoListActivity.this, AlarmReceiver.class);
+                        PendingIntent pi = PendingIntent.getBroadcast(ToDoListActivity.this, position + flagData0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
+                        AlarmManager am = (AlarmManager) getSystemService(Activity.ALARM_SERVICE);
                         am.cancel(pi);
 
-                        Intent intent1=new Intent(ToDoListActivity.this,DialogActivity.class);
-                        PendingIntent pi1=PendingIntent.getActivity(ToDoListActivity.this,position+flagData0,intent1,PendingIntent.FLAG_CANCEL_CURRENT);
-                        AlarmManager am1= (AlarmManager) getSystemService(Activity.ALARM_SERVICE);
-                        am1.cancel(pi1);
+                        Intent intent1 = new Intent(ToDoListActivity.this, DialogActivity.class);
+                        PendingIntent pi1 = PendingIntent.getActivity(ToDoListActivity.this, position + flagData0, intent1, PendingIntent.FLAG_CANCEL_CURRENT);
+                        AlarmManager am1 = (AlarmManager) getSystemService(Activity.ALARM_SERVICE);
+                         am1.cancel(pi1);
+
+                        //删除文件
+                        File file=new File(content+".txt");
+                        if (file.exists())
+                        file.delete();
+
+                        deleteFile(content+".txt"); //两种删除方法
 
                     }
                 });
                 builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-
+                        return;
                     }
                 });
                 builder.create().show();
@@ -116,7 +142,7 @@ public class ToDoListActivity extends AppCompatActivity {
 
                 Intent intent = new Intent(ToDoListActivity.this, AddToDoActivity.class);
                 intent.putExtra("groupName", groupName);
-                intent.putExtra("flagData",toDos2.size()+flagData0+"");
+                intent.putExtra("flagData", toDos2.size() + flagData0 + "");
                 MyApplication.setContext(ToDoListActivity.this);
                 startActivity(intent);
                 break;
@@ -124,39 +150,4 @@ public class ToDoListActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-//    public void clockRemind1() {
-//        toDos2 = DataService.getToDoList(this, groupName);
-//        mediaPlayer = MediaPlayer.create(ToDoListActivity.this, R.raw.run);
-//        Calendar calendar = Calendar.getInstance();
-//        int hour = calendar.get(Calendar.HOUR);//24小时制 hour是24小时
-//        int minutes = calendar.get(Calendar.MINUTE);
-//        String currentTime = hour + ":" + minutes;
-//        for (int i = 0; i < toDos2.size(); i++) {
-//            String[] b = toDos2.get(i).getValue().toString().split("&");
-//            String[] a = b[1].split(" ");
-//
-//            if (a[1].equals(currentTime)) {
-//                flag = 1;
-//                Toast.makeText(this, a[1] + "" + currentTime, Toast.LENGTH_LONG).show();
-//
-//            }
-//        }
-//        if (flag == 1) {
-//            mediaPlayer.start();
-//            AlertDialog alertDialog = new AlertDialog.Builder(this).create();
-//            alertDialog.setTitle("响铃提示");
-//            alertDialog.setMessage("取消响铃");
-//            alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, "确定", new DialogInterface.OnClickListener() {
-//                @Override
-//                public void onClick(DialogInterface dialog, int which) {
-//                    mediaPlayer.pause();
-//                    flag = 0;
-//                }
-//            });
-//            alertDialog.show();
-//        }
-//
-//    }
-
 }
-

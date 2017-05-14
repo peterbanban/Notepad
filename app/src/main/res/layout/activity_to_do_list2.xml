@@ -5,6 +5,7 @@
     android:id="@+id/activity_to_do_list2"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/background0"
     tools:context="com.example.administrator.notepad.activity.ToDoListActivity">
     <include layout="@layout/layout_appbar"/>
 

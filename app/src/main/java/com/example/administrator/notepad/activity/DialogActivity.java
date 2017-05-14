@@ -24,16 +24,21 @@ public class DialogActivity extends AppCompatActivity {
         AlertDialog alertDialog=new AlertDialog.Builder(DialogActivity.this).create();
         mediaPlayer = MediaPlayer.create(DialogActivity.this, R.raw.run);
             mediaPlayer.start();
+        Intent intent1=this.getIntent();
+        String context=intent1.getStringExtra("context");
+        int count=Integer.parseInt( intent1.getStringExtra("num"));
+        Intent intent=new Intent(DialogActivity.this, AlarmReceiver.class);
+        final PendingIntent pi= PendingIntent.getBroadcast(DialogActivity.this,count,intent,PendingIntent.FLAG_CANCEL_CURRENT);
+        final AlarmManager am= (AlarmManager) getSystemService(Activity.ALARM_SERVICE);
 
-            alertDialog.setTitle("闹钟响了");
-            alertDialog.setMessage("成功实现闹钟");
+
+
+        alertDialog.setTitle("闹钟响了");
+            alertDialog.setMessage(context);
             alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, "确认", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     mediaPlayer.pause();
-                    Intent intent=new Intent(DialogActivity.this, AlarmReceiver.class);
-                    PendingIntent pi= PendingIntent.getBroadcast(DialogActivity.this,which,intent,PendingIntent.FLAG_CANCEL_CURRENT);
-                    AlarmManager am= (AlarmManager) getSystemService(Activity.ALARM_SERVICE);
                     am.cancel(pi);
                     finish();
                 }
